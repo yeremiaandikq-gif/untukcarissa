@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Carissa — For My Everything</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #faf6f4;
+            color: #4a3e3d;
+            overflow-x: hidden;
+        }
+        .font-serif-custom {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Floating Particles */
+        @keyframes floatParticle {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.4; }
+            100% { transform: translateY(-105vh) translateX(40px) rotate(360deg); opacity: 0; }
+        }
+        .floating-particle {
+            position: fixed;
+            bottom: -5vh;
+            user-select: none;
+            pointer-events: none;
+            z-index: 10;
+            animation: floatParticle linear infinite;
+        }
+
+        /* Typewriter Cursor */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background-color: #b88e85;
+            margin-left: 3px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Reveal Animation on Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 3D Hanging Polaroid Style */
+        .polaroid-wrapper {
+            perspective: 1000px;
+            position: relative;
+            padding-top: 35px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* The String/Tali Gantung from Top */
+        .polaroid-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 35px;
+            background: linear-gradient(to bottom, #8c726b, #b88e85);
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        /* The Nail / Paku di atas */
+        .polaroid-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #3d2f2e;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 6;
+        }
+
+        .polaroid-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(234, 219, 213, 0.8);
+            padding: 12px 12px 14px 12px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px -10px rgba(184, 142, 133, 0.25);
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
+        /* Title Shimmer Effect */
+        .shimmer-text {
+            background: linear-gradient(135deg, #3d2f2e 30%, #b88e85 50%, #3d2f2e 70%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 5s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="bg-[#FAF6F4] selection:bg-[#e8cdcc] selection:text-[#3d2f2e]">
+
+    <!-- Floating Particles Container -->
+    <div id="particles-container"></div>
+
+    <!-- Hero Section -->
+    <header class="min-h-screen flex flex-col items-center justify-center text-center px-6 relative z-20">
+        <div class="max-w-3xl mx-auto reveal active space-y-6">
+            <span class="text-xs uppercase tracking-[0.35em] text-[#b88e85] font-semibold block animate-pulse">
+                For My Everything
+            </span>
+            <h1 class="font-serif-custom text-3xl sm:text-4xl md:text-5xl font-normal leading-snug shimmer-text">
+                Hai Carissa Elia Putri Lumban Tobing,<br><span class="italic font-light text-[#a57a70]">happy birthday cantik.</span>
+            </h1>
+
+            <div class="min-h-[60px] sm:min-h-[45px] flex items-center justify-center">
+                <p class="text-[#705e5c] text-base md:text-lg font-medium max-w-lg leading-relaxed inline">
+                    <span id="typewriter-text"></span><span id="cursor" class="typewriter-cursor"></span>
+                </p>
+            </div>
+
+            <div class="pt-8">
+                <a href="#story-start" class="inline-flex flex-col items-center group">
+                    <span class="bg-[#3d2f2e] text-[#FAF6F4] hover:bg-[#594644] text-xs sm:text-sm font-semibold tracking-wider px-7 py-3.5 rounded-full transition duration-300 shadow-xl group-hover:scale-110 transform flex items-center gap-2">
+                        Have a squiz at Onil's note 🦘
+                    </span>
+                    <span class="text-[11px] tracking-widest text-[#a57a70] uppercase mt-2.5 font-medium group-hover:text-[#3d2f2e] transition duration-300">
+                        Tap here for a quick squiz, darl ✨
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main id="story-start" class="max-w-5xl mx-auto px-6 space-y-28 md:space-y-36 pb-32 relative z-20">
+
+        <!-- Card 1 -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center reveal">
+            <div class="polaroid-wrapper">
+                <div class="polaroid-card w-full max-w-[280px] sm:max-w-[320px]" onclick="toggleZoom(this)">
+                    <div class="overflow-hidden rounded-lg aspect-[4/5] bg-[#EFE8E5]">
+                        <img src="https://cdn.zass.in/xu4WyGU7fu.jpg" onerror="this.onerror=null; this.src='https://placehold.co/600x750/efe6e3/8c726b?text=Foto+Carissa+1'" alt="Foto Carissa 1" class="w-full h-full object-cover rounded-md pointer-events-none">
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-4 md:pl-4">
+                <p class="text-[#705e5c] font-light leading-relaxed text-sm md:text-base">
+                    Pertama tama, gua mau bilang terimakasih dulu ke lu, el makasih udah lahir ke dunia ini, makasih udah jalanin hidup lu dengan kebahagiaan, makasih lu udah bertemu sama gua, makasih banget banget lu udah jadi bagian dari hidup gua.
+                </p>
+            </div>
+        </section>
+
+        <!-- Card 2 -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center reveal">
+            <div class="order-2 md:order-1 space-y-4 md:pr-4">
+                <p class="text-[#705e5c] font-light leading-relaxed text-sm md:text-base">
+                    Percaya ga percaya, lu udah banyak banget ngerubah hidup gua, cara pandang gua tentang dunia ini, dan cara berpikir gua. Lu ngenalin gua ke berbagai hal yang mungkin ga pernah gua sentuh sebelumnya, lu ngasih tau gua kalo ada banyak hal seru di dunia ini. Kalo boleh jujur, hidup gua sebelum ada lu tuh rasanya kayak boring banget, gaada something special di hidup gua sebelum ada lu. Tapi setelah ada lu dan senyuman lu, hidup gua jadi lebih cerah dan berwarna.
+                </p>
+            </div>
+            <div class="order-1 md:order-2 polaroid-wrapper">
+                <div class="polaroid-card w-full max-w-[280px] sm:max-w-[320px]" onclick="toggleZoom(this)">
+                    <div class="overflow-hidden rounded-lg aspect-[4/5] bg-[#EFE8E5]">
+                        <img src="https://cdn.zass.in/waFTzcCHtK.jpg" onerror="this.onerror=null; this.src='https://placehold.co/600x750/efe6e3/8c726b?text=Foto+Carissa+2'" alt="Foto Carissa 2" class="w-full h-full object-cover rounded-md pointer-events-none">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 3 -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center reveal">
+            <div class="polaroid-wrapper">
+                <div class="polaroid-card w-full max-w-[280px] sm:max-w-[320px]" onclick="toggleZoom(this)">
+                    <div class="overflow-hidden rounded-lg aspect-[4/5] bg-[#EFE8E5]">
+                        <img src="https://cdn.zass.in/QACiYibUFI.jpg" onerror="this.onerror=null; this.src='https://placehold.co/600x750/efe6e3/8c726b?text=Foto+Carissa+3'" alt="Foto Carissa 3" class="w-full h-full object-cover rounded-md pointer-events-none">
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-4 md:pl-4">
+                <p class="text-[#705e5c] font-light leading-relaxed text-sm md:text-base">
+                    El, jangan pernah berpikir bahwa hidup lu itu bukan apa apa ya! lu penting bagi gua dan akan selalu penting, jadi onil sedih kalo denger lu suka ngomong gitu :(. Lu itu kuat el, gua selalu bilang bahwa gua bangga sama lu itu bukan cuma sekedar pujian penghibur doang, gua beneran salut sama lu yang masih jalanin hidup dengan keceriaan dan memberikan keceriaan ke orang lain dengan kondisi lu yang sebenernya belum tentu baik baik aja. Itu yang ngebuat lu spesial dimata gua, lu itu emang diciptakan sama Tuhan ke dunia ini buat bahagia el, tapi mungkin belum sekarang waktunya.
+                </p>
+            </div>
+        </section>
+
+        <!-- Card 4 -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center reveal">
+            <div class="order-2 md:order-1 space-y-4 md:pr-4">
+                <p class="text-[#705e5c] font-light leading-relaxed text-sm md:text-base">
+                    El, maaf ya kalo gua sering ngebuat lu sedih, kecewa, marah, atau bahkan ngebuat lu nangis, maafin onil yang ga bisa jadi cowo baik buat el. tapi onil janji, onil bakal selalu terus dan terus menjadi lebih baik, dan tentunya bareng El bukan orang lain❤. Maaf juga kalo gua belum bisa bikin sesuatu yang seberapa buat ulang tahun lu, tapi gua berusaha ngasih apa yang bisa gua kasih buat hari spesial lu ini El.
+                </p>
+            </div>
+            <div class="order-1 md:order-2 polaroid-wrapper">
+                <div class="polaroid-card w-full max-w-[280px] sm:max-w-[320px]" onclick="toggleZoom(this)">
+                    <div class="overflow-hidden rounded-lg aspect-[4/5] bg-[#EFE8E5]">
+                        <img src="https://cdn.zass.in/VUHnOHoyN5.jpg" onerror="this.onerror=null; this.src='https://placehold.co/600x750/efe6e3/8c726b?text=Foto+Carissa+4'" alt="Foto Carissa 4" class="w-full h-full object-cover rounded-md pointer-events-none">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card 5 (Penutup) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center reveal">
+            <div class="polaroid-wrapper">
+                <div class="polaroid-card w-full max-w-[280px] sm:max-w-[320px]" onclick="toggleZoom(this)">
+                    <div class="overflow-hidden rounded-lg aspect-[4/5] bg-[#EFE8E5]">
+                        <img src="https://cdn.zass.in/2CrpcfDIIX.jpg" onerror="this.onerror=null; this.src='https://placehold.co/600x750/efe6e3/8c726b?text=Foto+Carissa+5'" alt="Foto Carissa 5" class="w-full h-full object-cover rounded-md pointer-events-none">
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-4 md:pl-4">
+                <p class="text-[#705e5c] font-light leading-relaxed text-sm md:text-base">
+                    Sekali lagi, selamat ulang tahun wanitaku, i love u so much, Tuhan Yesus Selalu Memberkati Carissa disetiap langkah Carissa💖
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Closing Message Card -->
+    <footer class="px-6 pb-28 relative z-20">
+        <div class="max-w-xl mx-auto glass-card rounded-3xl p-10 md:p-14 text-center shadow-xl reveal bg-white/70 backdrop-blur-md border border-[#eadbd5]">
+            <span class="text-xs uppercase tracking-[0.3em] text-[#b88e85] block mb-3 font-semibold">Special Wish For Carissa</span>
+            <h2 class="font-serif-custom text-3xl md:text-4xl text-[#3d2f2e] mb-4">I Love You So Much</h2>
+            <p class="text-[#705e5c] font-light text-sm md:text-base leading-relaxed mb-8">
+                Tuhan Yesus Selalu Memberkati Carissa disetiap langkah Carissa 💖
+            </p>
+            <button onclick="openModal()" class="bg-[#3d2f2e] text-[#FAF6F4] text-xs uppercase tracking-[0.2em] px-8 py-3.5 rounded-full hover:bg-[#594644] hover:scale-105 transition duration-300 shadow-lg">
+                To My Forever Love
+            </button>
+        </div>
+    </footer>
+
+    <!-- Interactive Closing Modal -->
+    <div id="greeting-modal" class="fixed inset-0 bg-[#2b2221]/50 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-6">
+        <div class="bg-[#FAF6F4] border border-[#EAE1DD] max-w-lg w-full rounded-3xl p-8 md:p-10 shadow-2xl text-center space-y-6 transform scale-95 transition-transform duration-300" id="modal-box">
+            <!-- Foto Kecil Pengganti Emoji -->
+            <div class="flex justify-center">
+                <img src="https://cdn.zass.in/kPp68LscUj.webp" alt="Special Photo" class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-full shadow-md border-2 border-[#b88e85] animate-bounce">
+            </div>
+            <h3 class="font-serif-custom text-2xl md:text-3xl text-[#3d2f2e]">Happy 18th Birthday!</h3>
+            <p class="text-[#705e5c] font-light text-sm leading-relaxed">
+                "Selalu ingat ya El, lu itu berharga, kuat, dan luar biasa. Makasih udah jadi bagian dari hidup gua dan bikin hidup gua jauh lebih indah."
+            </p>
+            <button onclick="closeModal()" class="bg-[#b88e85] text-white hover:bg-[#a57a70] text-xs font-semibold tracking-wider px-6 py-2.5 rounded-full transition duration-300 shadow-md hover:scale-105">
+                Goodonya, love ya heaps! ❤️
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const textToType = "Hari ini kamu, orang yang paling aku sayang berulang tahun yang ke 18❤️‍🔥";
+        const typewriterElement = document.getElementById("typewriter-text");
+        const cursorElement = document.getElementById("cursor");
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                typewriterElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 40);
+            } else {
+                setTimeout(() => {
+                    if (cursorElement) cursorElement.style.opacity = '0.4';
+                }, 1500);
+            }
+        }
+
+        window.onload = function() {
+            setTimeout(typeWriter, 400);
+            createFloatingParticles();
+        };
+
+        function createFloatingParticles() {
+            const container = document.getElementById('particles-container');
+            const symbols = ['♡', '❤️', '˚', '💖', '·', '✨'];
+
+            function spawn() {
+                const particle = document.createElement('div');
+                particle.classList.add('floating-particle');
+                particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                particle.style.left = Math.random() * 98 + 'vw';
+                const duration = Math.random() * 5 + 7;
+                particle.style.animationDuration = duration + 's';
+                particle.style.color = Math.random() > 0.5 ? '#b88e85' : '#e8cdcc';
+                particle.style.fontSize = (Math.random() * 10 + 10) + 'px';
+
+                container.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, duration * 1000);
+            }
+
+            setInterval(spawn, 500);
+        }
+
+        // Tap/Touch to Zoom In/Out on Polaroid Cards
+        function toggleZoom(card) {
+            const isZoomed = card.classList.contains('scale-110');
+            
+            document.querySelectorAll('.polaroid-card').forEach(c => {
+                c.classList.remove('scale-110', 'shadow-2xl');
+                c.style.transform = 'scale(1)';
+            });
+
+            if (!isZoomed) {
+                card.classList.add('scale-110', 'shadow-2xl');
+                card.style.transform = 'scale(1.12)';
+                card.style.zIndex = '30';
+            } else {
+                card.style.transform = 'scale(1)';
+                card.style.zIndex = '1';
+            }
+        }
+
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        const modal = document.getElementById('greeting-modal');
+        const modalBox = document.getElementById('modal-box');
+
+        function openModal() {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+            triggerFireworks();
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        function triggerFireworks() {
+            const duration = 2.5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#b88e85', '#e8cdcc', '#ffffff', '#ff69b4'] }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#b88e85', '#e8cdcc', '#ffffff', '#ff69b4'] }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
